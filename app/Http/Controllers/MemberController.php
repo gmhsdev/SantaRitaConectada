@@ -53,7 +53,8 @@ class MemberController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $member = Member::findOrFail($id);
+        return view('members.edit', compact('member'));
     }
 
     /**
@@ -61,7 +62,8 @@ class MemberController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $member = Member::findOrFail($id);
+        return view('members.edit', compact('member'));
     }
 
     /**
@@ -69,7 +71,19 @@ class MemberController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $member = Member::findOrFail($id);
+
+        $validated = $request->validate([
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'rut' => 'required|string|max:20|unique:members,rut,' . $member->id,
+        'email' => 'required|email|unique:members,email,' . $member->id,
+        'phone' => 'nullable|string|max:20',
+        ]);
+
+        $member->update($validated);
+
+        return redirect()->route('members.index')->with('success', 'Socio actualizado exitosamente.');
     }
 
     /**
