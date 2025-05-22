@@ -11,10 +11,17 @@ class MemberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index(Request $request)
     {
-        $members = Member::all(); // Recupera todos los registros de la tabla members
-        return view('members.index', compact('members')); // Pasa la variable a la vista
+    $search = $request->input('search');
+
+    $members = Member::when($search, function ($query, $search) {
+        return $query->where('first_name', 'like', "%{$search}%")
+                     ->orWhere('last_name', 'like', "%{$search}%")
+                     ->orWhere('rut', 'like', "%{$search}%");
+    })->orderBy('created_at', 'desc')->paginate(10);
+
+    return view('members.index', compact('members', 'search'));
     }
 
     /**
