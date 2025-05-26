@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Detalle de Socio</h1>
+    <h1 class="mb-4">Detalle de Socio</h1>
 
     {{-- Mensaje flash --}}
     @if(session('success'))
@@ -10,57 +10,106 @@
     @endif
 
     {{-- Datos del socio --}}
-    <div class="card mb-4">
-        <div class="card-body">
-            <p><strong>Nombre:</strong> {{ $member->first_name }} {{ $member->last_name }}</p>
-            <p><strong>RUT:</strong> {{ $member->rut }}</p>
-            <p><strong>Correo:</strong> {{ $member->email }}</p>
-            <p><strong>Teléfono:</strong> {{ $member->phone ?? '—' }}</p>
-            <p><strong>Dirección:</strong> {{ $member->address ?? '—' }}</p>
-            <p><strong>Fecha de nacimiento:</strong> {{ $member->birth_date ? \Carbon\Carbon::parse($member->birth_date)->format('d-m-Y') : '—' }}</p>
-            <p><strong>Fecha de ingreso:</strong> {{ $member->join_date ? \Carbon\Carbon::parse($member->join_date)->format('d-m-Y') : '—' }}</p>
-            <p><strong>Activo:</strong> {{ $member->is_active ? 'Sí' : 'No' }}</p>
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+            <strong>{{ $member->first_name }} {{ $member->last_name }}</strong>
         </div>
-        <div class="card-footer">
+        <div class="card-body row">
+            <div class="col-md-6 mb-2">
+                <p><strong>RUT:</strong> {{ $member->rut }}</p>
+            </div>
+            <div class="col-md-6 mb-2">
+                <p><strong>Correo:</strong> {{ $member->email }}</p>
+            </div>
+            <div class="col-md-6 mb-2">
+                <p><strong>Teléfono:</strong> {{ $member->phone ?? '—' }}</p>
+            </div>
+            <div class="col-md-6 mb-2">
+                <p><strong>Dirección:</strong> {{ $member->address ?? '—' }}</p>
+            </div>
+            <div class="col-md-6 mb-2">
+                <p><strong>Fecha de nacimiento:</strong>
+                   {{ $member->birth_date
+                        ? \Carbon\Carbon::parse($member->birth_date)->format('d-m-Y')
+                        : '—' }}
+                </p>
+            </div>
+            <div class="col-md-6 mb-2">
+                <p><strong>Fecha de ingreso:</strong>
+                   {{ $member->join_date
+                        ? \Carbon\Carbon::parse($member->join_date)->format('d-m-Y')
+                        : '—' }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Activo:</strong> {{ $member->is_active ? 'Sí' : 'No' }}</p>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
             <a href="{{ route('members.edit', $member->id) }}" class="btn btn-warning">Editar Socio</a>
             <a href="{{ route('members.index') }}" class="btn btn-secondary">Volver a la lista</a>
         </div>
     </div>
 
     {{-- Sección de Documentos --}}
-    <h3>Documentos</h3>
+    <div class="mb-4">
+        <h3>Documentos</h3>
 
-    {{-- Subida --}}
-    <form action="{{ route('member-documents.store', $member->id) }}" method="POST" enctype="multipart/form-data" class="mb-3">
-        @csrf
-        <div class="input-group">
-            <input type="file" name="document" class="form-control" accept="application/pdf" required>
+        {{-- Subida --}}
+        <form action="{{ route('member-documents.store', $member->id) }}"
+              method="POST"
+              enctype="multipart/form-data"
+              class="d-flex mb-3">
+            @csrf
+            <input type="file"
+                   name="document"
+                   class="form-control me-2 @error('document') is-invalid @enderror"
+                   accept="application/pdf"
+                   required>
             <button class="btn btn-primary">Subir PDF</button>
-        </div>
+        </form>
         @error('document')
-            <div class="text-danger mt-1">{{ $message }}</div>
+            <div class="alert alert-danger">{{ $message }}</div>
         @enderror
-    </form>
 
-    {{-- Lista --}}
-    @if($member->documents->isEmpty())
-        <p>No hay documentos subidos.</p>
-    @else
-        <ul class="list-group">
-            @foreach($member->documents as $doc)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $doc->document_name }}
-                    <div>
-                        <a href="{{ route('member-documents.download', $doc->id) }}" class="btn btn-sm btn-outline-info">Descargar</a>
-                        <form action="{{ route('member-documents.destroy', $doc->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Eliminar este documento?')">Eliminar</button>
-                        </form>
-                    </div>
-                </li>
-            @endforeach
-        </ul>
-    @endif
+        {{-- Lista --}}
+        @if($member->documents->isEmpty())
+            <p>No hay documentos subidos.</p>
+        @else
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nombre del archivo</th>
+                        <th>Fecha de subida</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($member->documents as $doc)
+                        <tr>
+                            <td>{{ $doc->document_name }}</td>
+                            <td>{{ $doc->created_at->format('d-m-Y H:i') }}</td>
+                            <td class="text-end">
+                                <a href="{{ route('member-documents.download', $doc->id) }}"
+                                   class="btn btn-sm btn-outline-info me-1">
+                                    Descargar
+                                </a>
+                                <form action="{{ route('member-documents.destroy', $doc->id) }}"
+                                      method="POST"
+                                      class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('¿Eliminar este documento?')">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+    </div>
 </div>
 @endsection
