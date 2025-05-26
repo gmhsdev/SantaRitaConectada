@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Member extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'first_name',
         'last_name',
         'rut',
@@ -17,4 +17,10 @@ class Member extends Model
         'join_date',
         'is_active',
     ];
+
+    // Relación con los documentos
+    public function documents()
+    {
+        return $this->hasMany(MemberDocument::class);
+    }
 }
