@@ -12,6 +12,10 @@
 
     <a href="{{ route('members.create') }}" class="btn btn-primary mb-3">Agregar Nuevo Socio</a>
 
+    <a href="{{ route('members.export') }}" class="btn btn-success mb-3">Exportar a CSV</a>
+
+
+
     {{-- Formulario de búsqueda --}}
     <form method="GET" action="{{ route('members.index') }}" class="row mb-4">
         <div class="col-md-8">

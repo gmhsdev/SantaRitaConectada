@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Member; // Asegúrate de importar el modelo
+use App\Models\Member; //importar el modelo
 
+use Spatie\SimpleExcel\SimpleExcelWriter;
+use Illuminate\Support\Facades\Storage;
 
 class MemberController extends Controller
 {
@@ -107,4 +109,31 @@ public function update(Request $request, string $id)
 
         return redirect()->route('members.index')->with('success', 'Socio eliminado correctamente.');
     }
+
+    
+    public function export()
+    {
+        $fileName = 'socios_' . now()->format('Y-m-d_H-i-s') . '.csv';
+        $filePath = storage_path("app/public/{$fileName}");
+
+        // Asegúrate de que el directorio exista
+        if (!file_exists(dirname($filePath))) {
+            mkdir(dirname($filePath), 0755, true);
+        }
+
+        SimpleExcelWriter::create($filePath)
+            ->addRows(Member::all()->map(function ($member) {
+                return [
+                    'Nombre'         => $member->first_name . ' ' . $member->last_name,
+                    'RUT'            => $member->rut,
+                    'Correo'         => $member->email,
+                    'Teléfono'       => $member->phone,
+                    'Dirección'      => $member->address,
+                    'Fecha Ingreso'  => optional($member->join_date)->format('d-m-Y'),
+                ];
+            })->all());
+
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
+
 }
