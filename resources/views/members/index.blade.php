@@ -40,6 +40,8 @@
                     <th>RUT</th>
                     <th>Correo</th>
                     <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Fecha de Ingreso</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -50,6 +52,14 @@
                         <td>{{ $member->rut }}</td>
                         <td>{{ $member->email }}</td>
                         <td>{{ $member->phone }}</td>
+                        
+                        <td>{{ $member->address }}</td>
+                        <td>
+                        {{ $member->join_date
+                            ? \Carbon\Carbon::parse($member->join_date)->format('d-m-Y')
+                            : '—' }}
+                        </td>
+
                         <td>
                             <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-warning">Editar</a>
                             <form

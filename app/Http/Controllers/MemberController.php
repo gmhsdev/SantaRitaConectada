@@ -76,23 +76,27 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $member = Member::findOrFail($id);
+public function update(Request $request, string $id)
+{
+    $member = Member::findOrFail($id);
 
-        $validated = $request->validate([
+    $validated = $request->validate([
         'first_name' => 'required|string|max:255',
-        'last_name' => 'required|string|max:255',
-        'rut' => 'required|string|max:20|unique:members,rut,' . $member->id,
-        'email' => 'required|email|unique:members,email,' . $member->id,
-        'phone' => 'nullable|string|max:20',
-        ]);
+        'last_name'  => 'required|string|max:255',
+        'rut'        => 'required|string|max:20|unique:members,rut,' . $member->id,
+        'email'      => 'required|email|unique:members,email,' . $member->id,
+        'phone'      => 'nullable|string|max:20',
+        'address'    => 'nullable|string|max:255', 
+        'birth_date' => 'nullable|date',              
+        'join_date'  => 'nullable|date',              
+    ]);
 
-        $member->update($validated);
+    $member->update($validated);
 
-        return redirect()->route('members.index')->with('success', 'Socio actualizado exitosamente.');
-    }
-
+    return redirect()
+        ->route('members.index')
+        ->with('success', 'Socio actualizado exitosamente.');
+}
     /**
      * Remove the specified resource from storage.
      */

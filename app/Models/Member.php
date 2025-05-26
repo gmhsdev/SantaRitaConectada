@@ -15,6 +15,6 @@ class Member extends Model
         'address',
         'birth_date',
         'join_date',
-        'is_active',    // si luego permites togglear este valor
+        'is_active',
     ];
 }
