@@ -62,9 +62,10 @@ class MemberController extends Controller
      */
     public function show(string $id)
     {
-        $member = Member::findOrFail($id);
-        return view('members.edit', compact('member'));
+    $member = Member::with('documents')->findOrFail($id);
+    return view('members.show', compact('member'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

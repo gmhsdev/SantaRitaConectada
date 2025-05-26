@@ -65,6 +65,8 @@
                         </td>
 
                         <td>
+                            <a href="{{ route('members.show', $member->id) }}" class="btn btn-sm btn-info">Ver</a>
+
                             <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-warning">Editar</a>
                             <form
                                 action="{{ route('members.destroy', $member->id) }}"
