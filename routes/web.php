@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberDocumentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\InvitationController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,7 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('documents/{document}', [MemberDocumentController::class, 'destroy'])->name('member-documents.destroy');
 
     // Rutas de invitaciones (citaciones)
-    Route::resource('invitations', \App\Http\Controllers\InvitationController::class);
+    
+    Route::get('invitations/export', [InvitationController::class, 'export'])->name('invitations.export');
+    Route::resource('invitations', InvitationController::class);
 
 });
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Invitation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+
 
 class InvitationController extends Controller
 {
@@ -67,4 +69,44 @@ class InvitationController extends Controller
             ->route('invitations.index')
             ->with('success', 'Citación eliminada.');
     }
+
+    //exporta la invitación en CSV
+    public function export()
+    {
+    $invitations = Invitation::orderBy('scheduled_at', 'desc')->get();
+
+    $csvData = [];
+    $csvData[] = ['Título', 'Descripción', 'Fecha de Citación'];
+
+    foreach ($invitations as $inv) {
+        $csvData[] = [
+            $inv->title,
+            $inv->body,
+            $inv->scheduled_at->format('Y-m-d H:i'),
+        ];
+    }
+
+    $filename = 'citaciones_' . now()->format('Ymd_His') . '.csv';
+    $handle = fopen('php://temp', 'r+');
+
+    foreach ($csvData as $line) {
+        fputcsv($handle, $line);
+    }
+
+    rewind($handle);
+    $contents = stream_get_contents($handle);
+    fclose($handle);
+
+    return Response::make($contents, 200, [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => "attachment; filename={$filename}",
+    ]);
+    }
+
+    // Muestra una citación individual
+    public function show(Invitation $invitation)
+    {
+    return view('invitations.show', compact('invitation'));
+    }
+
 }

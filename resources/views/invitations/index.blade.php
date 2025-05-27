@@ -5,10 +5,18 @@
 <div class="max-w-4xl mx-auto p-6">
     <h1 class="text-2xl font-bold mb-4">Citaciones</h1>
 
-    <a href="{{ route('invitations.create') }}"
-       class="mb-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-       Nueva Citación
-    </a>
+    <div class="flex flex-wrap gap-3 mb-4">
+        <a href="{{ route('invitations.create') }}"
+           class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+           Nueva Citación
+        </a>
+
+        {{-- Botón de exportar a CSV --}}
+        <a href="{{ route('invitations.export') }}"
+           class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
+           Exportar a CSV
+        </a>
+    </div>
 
     @if(session('success'))
         <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
@@ -35,6 +43,8 @@
                         {{ $inv->scheduled_at->format('d-m-Y H:i') }}
                     </td>
                     <td class="px-4 py-2 border space-x-2">
+                        <a href="{{ route('invitations.show', $inv) }}"
+                           class="text-green-600 hover:underline">Ver</a>
                         <a href="{{ route('invitations.edit', $inv) }}"
                            class="text-blue-600 hover:underline">Editar</a>
                         <form action="{{ route('invitations.destroy', $inv) }}"
