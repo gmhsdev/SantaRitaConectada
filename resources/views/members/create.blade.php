@@ -1,104 +1,154 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Agregar Nuevo Socio</h1>
+<div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-semibold mb-6 text-gray-800">Agregar Nuevo Socio</h1>
 
-    <form action="{{ route('members.store') }}" method="POST">
+    <form action="{{ route('members.store') }}" method="POST" class="space-y-6">
         @csrf
 
-        <div class="row">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {{-- Nombre --}}
-            <div class="mb-3 col-md-6">
-                <label for="first_name" class="form-label">Nombre:</label>
-                <input type="text" name="first_name" id="first_name"
-                       class="form-control @error('first_name') is-invalid @enderror"
-                       value="{{ old('first_name') }}" required>
+            <div>
+                <label for="first_name" class="block text-gray-700 font-medium mb-1">Nombre:</label>
+                <input
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    value="{{ old('first_name') }}"
+                    required
+                    class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                           @error('first_name') border-red-500 @enderror"
+                >
                 @error('first_name')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
             {{-- Apellido --}}
-            <div class="mb-3 col-md-6">
-                <label for="last_name" class="form-label">Apellido:</label>
-                <input type="text" name="last_name" id="last_name"
-                       class="form-control @error('last_name') is-invalid @enderror"
-                       value="{{ old('last_name') }}" required>
+            <div>
+                <label for="last_name" class="block text-gray-700 font-medium mb-1">Apellido:</label>
+                <input
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    value="{{ old('last_name') }}"
+                    required
+                    class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                           @error('last_name') border-red-500 @enderror"
+                >
                 @error('last_name')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
         </div>
 
         {{-- RUT --}}
-        <div class="mb-3">
-            <label for="rut" class="form-label">RUT:</label>
-            <input type="text" name="rut" id="rut"
-                   class="form-control @error('rut') is-invalid @enderror"
-                   value="{{ old('rut') }}" required>
+        <div>
+            <label for="rut" class="block text-gray-700 font-medium mb-1">RUT:</label>
+            <input
+                type="text"
+                name="rut"
+                id="rut"
+                value="{{ old('rut') }}"
+                required
+                class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                       @error('rut') border-red-500 @enderror"
+            >
             @error('rut')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
         {{-- Email --}}
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo electrónico:</label>
-            <input type="email" name="email" id="email"
-                   class="form-control @error('email') is-invalid @enderror"
-                   value="{{ old('email') }}" required>
+        <div>
+            <label for="email" class="block text-gray-700 font-medium mb-1">Correo electrónico:</label>
+            <input
+                type="email"
+                name="email"
+                id="email"
+                value="{{ old('email') }}"
+                required
+                class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                       @error('email') border-red-500 @enderror"
+            >
             @error('email')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
         {{-- Teléfono --}}
-        <div class="mb-3">
-            <label for="phone" class="form-label">Teléfono:</label>
-            <input type="text" name="phone" id="phone"
-                   class="form-control @error('phone') is-invalid @enderror"
-                   value="{{ old('phone') }}">
+        <div>
+            <label for="phone" class="block text-gray-700 font-medium mb-1">Teléfono:</label>
+            <input
+                type="text"
+                name="phone"
+                id="phone"
+                value="{{ old('phone') }}"
+                class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                       @error('phone') border-red-500 @enderror"
+            >
             @error('phone')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        {{-- Dirección (opcional) --}}
-        <div class="mb-3">
-            <label for="address" class="form-label">Dirección:</label>
-            <input type="text" name="address" id="address"
-                   class="form-control @error('address') is-invalid @enderror"
-                   value="{{ old('address') }}">
+        {{-- Dirección --}}
+        <div>
+            <label for="address" class="block text-gray-700 font-medium mb-1">Dirección:</label>
+            <input
+                type="text"
+                name="address"
+                id="address"
+                value="{{ old('address') }}"
+                class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                       @error('address') border-red-500 @enderror"
+            >
             @error('address')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        {{-- Fecha de nacimiento (opcional) --}}
-        <div class="mb-3">
-            <label for="birth_date" class="form-label">Fecha de nacimiento:</label>
-            <input type="date" name="birth_date" id="birth_date"
-                   class="form-control @error('birth_date') is-invalid @enderror"
-                   value="{{ old('birth_date') }}">
+        {{-- Fecha de nacimiento --}}
+        <div>
+            <label for="birth_date" class="block text-gray-700 font-medium mb-1">Fecha de nacimiento:</label>
+            <input
+                type="date"
+                name="birth_date"
+                id="birth_date"
+                value="{{ old('birth_date') }}"
+                class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                       @error('birth_date') border-red-500 @enderror"
+            >
             @error('birth_date')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        {{-- Fecha de ingreso (opcional) --}}
-        <div class="mb-3">
-            <label for="join_date" class="form-label">Fecha de ingreso:</label>
-            <input type="date" name="join_date" id="join_date"
-                   class="form-control @error('join_date') is-invalid @enderror"
-                   value="{{ old('join_date') }}">
+        {{-- Fecha de ingreso --}}
+        <div>
+            <label for="join_date" class="block text-gray-700 font-medium mb-1">Fecha de ingreso:</label>
+            <input
+                type="date"
+                name="join_date"
+                id="join_date"
+                value="{{ old('join_date') }}"
+                class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500
+                       @error('join_date') border-red-500 @enderror"
+            >
             @error('join_date')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
         </div>
 
-        <button type="submit" class="btn btn-success">Guardar Socio</button>
-        <a href="{{ route('members.index') }}" class="btn btn-secondary">Cancelar</a>
+        <div class="flex gap-4 mt-6">
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded shadow">
+                Guardar Socio
+            </button>
+            <a href="{{ route('members.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded shadow">
+                Cancelar
+            </a>
+        </div>
     </form>
 </div>
 @endsection
