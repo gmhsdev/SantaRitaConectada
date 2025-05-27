@@ -28,6 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::post('members/{member}/documents', [MemberDocumentController::class, 'store'])->name('member-documents.store');
     Route::get('documents/{document}/download', [MemberDocumentController::class, 'download'])->name('member-documents.download');
     Route::delete('documents/{document}', [MemberDocumentController::class, 'destroy'])->name('member-documents.destroy');
+
+    // Rutas de invitaciones (citaciones)
+    Route::resource('invitations', \App\Http\Controllers\InvitationController::class);
+
 });
 
 require __DIR__.'/auth.php';
